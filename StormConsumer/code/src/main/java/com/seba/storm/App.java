@@ -16,7 +16,7 @@ public class App{
         
         TopologyBuilder builder = new TopologyBuilder();
         // sample is the topic and values are json like {'number': 0}
-        builder.setSpout("kafka_spout", new KafkaSpout<>(KafkaSpoutConfig.builder("localhost:9092", "sample").build()), 1);
+        builder.setSpout("kafka_spout", new KafkaSpout<>(KafkaSpoutConfig.builder("localhost:9093", "numbers").build()), 1);
         // builder.setSpout("IntegerSpout", new IntergerSpout());
         builder.setBolt("multiplier_bolt", new MultiplierBolt()).shuffleGrouping("kafka_spout");
         builder.setBolt("number_saver_bolt", new NumberSaverBolt(), 1).shuffleGrouping("multiplier_bolt");

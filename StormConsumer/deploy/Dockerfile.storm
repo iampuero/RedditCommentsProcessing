@@ -1,0 +1,11 @@
+# https://hub.docker.com/_/maven
+FROM maven:3.6.3-jdk-11
+
+# add dependencies
+WORKDIR /app
+ADD ./code/pom.xml /app
+RUN mvn verify clean --fail-never
+
+# create the app
+ADD ./code /app
+RUN mvn clean install -DskipTests
