@@ -36,14 +36,15 @@ services:
     build:
       context: ./..
       dockerfile: ./deploy/Dockerfile.storm
-    command: "java -jar /app/target/storm-app-1.0-SNAPSHOT.jar"
-    # command: "sh /storm-init.sh"
+    command: "sh /storm-init.sh"
     volumes: 
-      - ../../code/:/app/
+      - "../code:/app"
       - "./storm-init.sh:/storm-init.sh"
     environment: 
       STORM_KAFKA_CONNECT: storm-kafka:9092
       STORM_CASSANDRA_CONNECT: storm-cassandra
+    networks:
+      - storm-network
 
 networks:
   storm-network:

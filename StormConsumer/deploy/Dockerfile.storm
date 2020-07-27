@@ -3,9 +3,10 @@ FROM maven:3.6.3-jdk-11
 
 # add dependencies
 WORKDIR /app
-ADD ./code/pom.xml /app
+ADD code/pom.xml /app
 RUN mvn verify clean --fail-never
 
 # create the app
-ADD ./code /app
-RUN mvn clean install -DskipTests
+ADD code/ /app
+# RUN mvn install -DskipTests
+# ENTRYPOINT [ "java", "-jar", "/app/target/storm-app-1.0-SNAPSHOT-jar-with-dependencies.jar" ]
