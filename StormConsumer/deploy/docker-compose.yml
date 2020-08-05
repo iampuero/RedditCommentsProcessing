@@ -1,0 +1,50 @@
+version: '3'
+services:
+  # https://hub.docker.com/r/wurstmeister/zookeeper
+  storm-zookeeper:
+    image: wurstmeister/zookeeper:3.4.6
+    networks:
+      - storm-network
+  # https://hub.docker.com/r/wurstmeister/kafka
+  storm-kafka:
+    depends_on:
+      - storm-zookeeper
+    image: wurstmeister/kafka:2.12-2.5.0
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: storm-zookeeper:2181
+      KAFKA_CREATE_TOPICS: "numbers:1:1"
+    networks:
+      - storm-network
+    ports:
+      - "9093:9092" # produce from the outworld
+  # https://hub.docker.com/_/cassandra
+  storm-cassandra:
+    image: cassandra:3.11.6
+    volumes:
+      - "./cassandra-init.sh:/cassandra-init.sh"
+    command: "sh /cassandra-init.sh"
+    healthcheck:
+      test: ["CMD-SHELL", "[ $$(nodetool statusgossip) = running ]"]
+    networks:
+      - storm-network
+  # here is where the magic happens
+  storm-app:
+    depends_on: 
+      - storm-kafka
+      - storm-cassandra
+    build:
+      context: ./..
+      dockerfile: ./deploy/Dockerfile.storm
+    command: "sh /storm-init.sh"
+    volumes: 
+      - "../code:/app"
+      - "./storm-init.sh:/storm-init.sh"
+    environment: 
+      STORM_KAFKA_CONNECT: storm-kafka:9092
+      STORM_CASSANDRA_CONNECT: storm-cassandra
+    networks:
+      - storm-network
+
+networks:
+  storm-network:

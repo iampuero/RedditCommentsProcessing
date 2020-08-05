@@ -16,7 +16,7 @@ public abstract class CassandraBaseBolt extends BaseBasicBolt{
 
     @Override
     public void prepare(Map<String, Object> topoConf, TopologyContext context) {
-        cluster = Cluster.builder().addContactPoint("localhost").build();
+        cluster = Cluster.builder().addContactPoint(System.getenv("STORM_CASSANDRA_CONNECT")).build();
         session = cluster.connect("test_numbers");
     }
 
