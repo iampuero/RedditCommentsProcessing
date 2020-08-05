@@ -11,9 +11,9 @@ services:
       - storm-zookeeper
     image: wurstmeister/kafka:2.12-2.5.0
     environment:
-      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_HOST_NAME: storm-kafka
       KAFKA_ZOOKEEPER_CONNECT: storm-zookeeper:2181
-      KAFKA_CREATE_TOPICS: "numbers:1:1"
+      KAFKA_CREATE_TOPICS: "numbers"
     networks:
       - storm-network
     ports:
@@ -48,3 +48,4 @@ services:
 
 networks:
   storm-network:
+    external: true
