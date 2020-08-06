@@ -13,18 +13,23 @@ import org.apache.storm.topology.TopologyBuilder;
 public class App{
 
     public static void main( String[] args ){
-        
+        String kafka_host = "localhost:9092"; 
+        // String kafka_host = System.getenv("STORM_KAFKA_CONNECT");
+        String kafka_topic = "numbers";
+        // creation of the toppology
         TopologyBuilder builder = new TopologyBuilder();
-        // sample is the topic and values are json like {'number': 0}
-        builder.setSpout("kafka_spout", new KafkaSpout<>(KafkaSpoutConfig.builder(System.getenv("STORM_KAFKA_CONNECT"), "numbers").build()), 1);
-        // builder.setSpout("IntegerSpout", new IntergerSpout());
+        // in our case the spout is going to be a kafka consumer
+        builder.setSpout("kafka_spout", new KafkaSpout<>(KafkaSpoutConfig.builder(kafka_host, kafka_topic).build()), 1);
+        // in this bolts we procese the data
+        // builder.setBolt("read_json_bolt", new ReadJsonBolt()).shuffleGrouping("kafka_spout");
         builder.setBolt("multiplier_bolt", new MultiplierBolt()).shuffleGrouping("kafka_spout");
-        builder.setBolt("number_saver_bolt", new NumberSaverBolt(), 1).shuffleGrouping("multiplier_bolt");
+        // this bolt save the data in cassandra
+        // builder.setBolt("number_saver_bolt", new NumberSaverBolt(), 1).shuffleGrouping("multiplier_bolt");
 
         Config config = new Config();
         // config.put(Config.NIMBUS_THRIFT_PORT, 6627);
         // config.put(Config.STORM_ZOOKEEPER_PORT, 2181);
-        config.setDebug(true);
+        // config.setDebug(true);
         
         try {
             LocalCluster cluster = new LocalCluster();
