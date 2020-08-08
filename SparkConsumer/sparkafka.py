@@ -4,14 +4,10 @@ from pyspark.streaming.kafka import KafkaUtils
 
 
 # Create a local StreamingContext with two working thread and batch interval of 1 second
-sc = SparkContext("local[2]", "NetworkWordCount")
+sc = SparkContext("local[2]", "RedditReciever")
 ssc = StreamingContext(sc, 1)
-directKafkaStream = KafkaUtils.createDirectStream(ssc, ['numbers'], {"bootstrap.servers": 'localhost:9092'})
+directKafkaStream = KafkaUtils.createDirectStream(ssc, ['Reddit'], {"bootstrap.servers": 'localhost:9092'})
 
-
-#lines = ssc.socketTextStream("localhost", 9092)
-#words = lines.flatMap(lambda string: string.split())
-#words.pprint()
 
 directKafkaStream.pprint()
 
