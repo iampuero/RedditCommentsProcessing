@@ -1,0 +1,12 @@
+version: '3'
+services:
+
+  cassandra:
+    image: cassandra:3.11.6
+    volumes:
+      - "./cassandra-init.sh:/cassandra-init.sh"
+    command: "sh /cassandra-init.sh"
+    healthcheck:
+      test: ["CMD-SHELL", "[ $$(nodetool statusgossip) = running ]"]
+    ports:
+      - "9042:9042"
