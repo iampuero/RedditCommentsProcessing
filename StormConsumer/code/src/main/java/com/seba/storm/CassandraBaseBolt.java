@@ -18,7 +18,7 @@ public abstract class CassandraBaseBolt extends BaseBasicBolt{
     public void prepare(Map<String, Object> topoConf, TopologyContext context) {
         // String cassandra_host = System.getenv("STORM_CASSANDRA_CONNECT");
         String cassandra_host = "localhost";
-        String cassandra_keyspace = "test_numbers";
+        String cassandra_keyspace = "reddit";
         cluster = Cluster.builder().addContactPoint(cassandra_host).build();
         session = cluster.connect(cassandra_keyspace);
     }

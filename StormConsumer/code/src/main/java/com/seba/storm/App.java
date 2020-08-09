@@ -15,16 +15,17 @@ public class App{
     public static void main( String[] args ){
         String kafka_host = "localhost:9092"; 
         // String kafka_host = System.getenv("STORM_KAFKA_CONNECT");
-        String kafka_topic = "numbers";
+        String kafka_topic = "Reddit";
         // creation of the toppology
         TopologyBuilder builder = new TopologyBuilder();
         // in our case the spout is going to be a kafka consumer
-        builder.setSpout("kafka_spout", new KafkaSpout<>(KafkaSpoutConfig.builder(kafka_host, kafka_topic).build()), 1);
+        builder.setSpout("kafka_spout", new KafkaSpout<>(KafkaSpoutConfig.builder(kafka_host, kafka_topic).build()));
         // in this bolts we procese the data
-        // builder.setBolt("read_json_bolt", new ReadJsonBolt()).shuffleGrouping("kafka_spout");
-        builder.setBolt("multiplier_bolt", new MultiplierBolt()).shuffleGrouping("kafka_spout");
+        builder.setBolt("read_json_bolt", new ReadJsonBolt()).shuffleGrouping("kafka_spout");
+        // in this bolt we count the data
+        builder.setBolt("counter_bolt", new CounterBolt()).shuffleGrouping("read_json_bolt");
         // this bolt save the data in cassandra
-        // builder.setBolt("number_saver_bolt", new NumberSaverBolt(), 1).shuffleGrouping("multiplier_bolt");
+        builder.setBolt("word_saver_bolt", new StringSaverBolt(), 1).shuffleGrouping("counter_bolt");
 
         Config config = new Config();
         // config.put(Config.NIMBUS_THRIFT_PORT, 6627);
