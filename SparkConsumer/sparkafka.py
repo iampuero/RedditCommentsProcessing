@@ -18,7 +18,7 @@ STOP = ["a","about","above","after","again","against","all","am","an","and","any
         "these","they","they'd","they'll","they're","they've","this","those","through","to","too","under","until","up",
         "very","was","wasn't","we","we'd","we'll","we're","we've","were","weren't","what","what's","when","when's","where",
         "where's","which","while","who","who's","whom","why","why's","with","won't","would","wouldn't","you","you'd","you'll",
-        "you're","you've","your","yours","yourself","yourselves"]
+        "you're","you've","your","yours","yourself","yourselves","just","like","will","can"]
 
 def updateFunc(new_values, last_sum):
   count = 0

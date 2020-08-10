@@ -11,5 +11,5 @@ with open("files/"+argv[1]) as O:
     for line in O:
         data = loads(line)
         producer.send('Reddit', value=data)
-        sleep(0.5)
+        #sleep(0.5)
 

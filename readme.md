@@ -51,7 +51,7 @@
 
 * Usar el script para recibir de kafka ``sparkafka.py``
 
-``./spark2.4/bin/spark-submit --jars spark2.4/jars/spark-streaming-kafka-0-10-assembly_2.11-2.4.6.jar sparkafka.py localhost 9092``
+``./spark2.4/bin/spark-submit --jars spark2.4/jars/spark-streaming-kafka-0-10-assembly_2.11-2.4.6.jar  --packages anguenot/pyspark-cassandra:2.4.0 sparkafka.py localhost 9092``
 
 ### Cassandra
 
@@ -60,3 +60,10 @@
 ``wget https://downloads.apache.org/cassandra/3.11.7/apache-cassandra-3.11.7-bin.tar.gz``
 
 ``tar -xzf apache-cassandra-3.11.7-bin.tar.gz``
+
+
+### Streamlit
+
+``pip3 install streamlit seaborn matplotlib pandas cassandra-driver``
+
+``streamlit run vis.py``
