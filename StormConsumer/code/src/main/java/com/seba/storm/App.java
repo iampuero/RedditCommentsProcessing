@@ -27,6 +27,16 @@ public class App{
         // this bolt save the data in cassandra
         builder.setBolt("word_saver_bolt", new StringSaverBolt(), 1).shuffleGrouping("counter_bolt");
 
+        // second version: in this case the bolt that save the data make a query to get the previus value
+        // comment the version above and discomment this part to use it
+        // TopologyBuilder builder = new TopologyBuilder();
+        // // in our case the spout is going to be a kafka consumer
+        // builder.setSpout("kafka_spout", new KafkaSpout<>(KafkaSpoutConfig.builder(kafka_host, kafka_topic).build()));
+        // // in this bolts we procese the data
+        // builder.setBolt("read_json_bolt", new ReadJsonBolt()).shuffleGrouping("kafka_spout");
+        // // this bolt save the data in cassandra
+        // builder.setBolt("word_saver_bolt", new StringUpdateBolt(), 1).shuffleGrouping("read_json_bolt");
+
         Config config = new Config();
         // config.put(Config.NIMBUS_THRIFT_PORT, 6627);
         // config.put(Config.STORM_ZOOKEEPER_PORT, 2181);

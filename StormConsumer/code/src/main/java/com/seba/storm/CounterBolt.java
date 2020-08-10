@@ -37,10 +37,11 @@ public class CounterBolt implements IRichBolt {
 
     if(!counterMap.containsKey(subreddit)){
       counterMap.put(subreddit, new HashMap<String, Integer[]>());
-    } if(!counterMap.get(subreddit).containsKey(word)){
+    } 
+    if(!counterMap.get(subreddit).containsKey(word)){
       Integer[] counterArray = new Integer[2];
-      counterArray[0] = 0;
-      counterArray[1] = 0;
+      counterArray[0] = 0; // count
+      counterArray[1] = 0; // score
       counterMap.get(subreddit).put(word, counterArray);
     } else{
       Integer[] counters = counterMap.get(subreddit).get(word);
@@ -51,13 +52,8 @@ public class CounterBolt implements IRichBolt {
 
     Integer[] temp_values = counterMap.get(subreddit).get(word);
 
-    if (temp_values[0] == 10) {
+    if (temp_values[0] % 10 == 0) {
       collector.emit(new Values(word, subreddit, temp_values[0], temp_values[1]));
-      // reset the counter
-      Integer[] counterArray = new Integer[2];
-      counterArray[0] = 0;
-      counterArray[1] = 0;
-      counterMap.get(subreddit).put(word, counterArray);
     }
   }
 
