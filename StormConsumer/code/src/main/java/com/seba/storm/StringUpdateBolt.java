@@ -10,7 +10,7 @@ import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.tuple.Tuple;
 
-public class StringSaverBolt extends CassandraBaseBolt {
+public class StringUpdateBolt extends CassandraBaseBolt {
 
     /**
      *
@@ -24,9 +24,23 @@ public class StringSaverBolt extends CassandraBaseBolt {
         String word = input.getStringByField("word");
         String subreddit = input.getStringByField("subreddit");
         long score = input.getIntegerByField("score");
-        long count = input.getIntegerByField("counter");
+        Row row;
+        long count = 0L;
+        long tempscore = 0L;
 
         try {
+            Statement selectQuery = QueryBuilder.select("count", "score").from(TABLE_NAME)
+                .where(QueryBuilder.eq("subreddit", subreddit))
+                .and(QueryBuilder.eq("word", word));
+            
+            row = session.execute(selectQuery).one();
+            
+            if (row != null) {
+                count = row.getLong("count");
+                tempscore = row.getLong("score");
+            }
+            count++;
+            score = score + tempscore;
             // define the insertion query
             Statement insertQuery = QueryBuilder.insertInto(TABLE_NAME)
                 .value("subreddit", subreddit)
