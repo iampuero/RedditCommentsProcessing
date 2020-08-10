@@ -4,8 +4,11 @@ from pyspark.streaming.kafka import KafkaUtils
 from pyspark.conf import SparkConf
 from pyspark_cassandra import CassandraSparkContext,Row,streaming
 import pyspark_cassandra
+import string
 from json import loads
 
+
+whitelist = string.letters + ' '
 STOP = ["a","about","above","after","again","against","all","am","an","and","any","are","aren't","as",
         "at","be","because","been","before","being","below","between","both","but","by","can't","cannot",
         "could","couldn't","did","didn't","do","does","doesn't","doing","don't","down","during","each","few",
@@ -54,7 +57,7 @@ dks = KafkaUtils.createDirectStream(ssc, ['Reddit'], {"bootstrap.servers": 'loca
 
 #scores
 scores = dks.map(lambda x: loads(x[1])) \
-          .flatMap(lambda x: (((x["subreddit"],y),x["ups"]-x["downs"]) for y in x["body"].lower().replace(".","").replace(",","").split() if (len(y)<15 and y not in STOP)) )\
+          .flatMap(lambda x: (((x["subreddit"],y),x["ups"]-x["downs"]) for y in ''.join(c for c in x["body"].lower() if c in whitelist).split() if (len(y)<15 and y not in STOP)) )\
           .reduceByKey(lambda x,y:x+y)\
           .map(lambda x: (x,1))\
           .reduceByKey(lambda x,y: x+y)\

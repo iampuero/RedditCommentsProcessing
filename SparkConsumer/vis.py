@@ -15,7 +15,7 @@ def cargarDataset(sr):
     rows = session.execute("SELECT * from word_counter WHERE count > 100 AND subreddit = '{0}' ALLOW FILTERING".format(sr))
     data = [[row.subreddit,row.word,row.count,row.score] for row in rows]
     datacount = sorted(data,key=lambda x: x[2],reverse=True)[:25]
-    datascore = sorted(data,key=lambda x: x[3],reverse=True)[:25]
+    datascore = sorted(data,key=lambda x: x[3]/x[2],reverse=True)[:25]
     return pd.DataFrame(datacount,columns=["SubReddit","Word","Count","Score"]) , pd.DataFrame(datascore,columns=["SubReddit","Word","Count","Score"])
 
 while False:
@@ -33,7 +33,8 @@ plt.subplot(1,2,1)
 plt.title("Word Counts")
 sns.barplot(y="Word", x="Count", data=counts)
 plt.subplot(1,2,2)
-plt.title("Word Scores")
-sns.barplot(y="Word", x="Score", data=scores)
+plt.title("Word Mean Score")
+scores["MeanScore"]=scores["Score"]/scores["Count"]
+sns.barplot(y="Word", x="MeanScore", data=scores)
 plt.tight_layout()
 st.pyplot()
