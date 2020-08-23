@@ -16,7 +16,7 @@ Para poder ejecutar Kafka es necesario tener instalado Zookeeper (ZK),
 Para compilar y ejecutar la aplicación es necesario tener maven.
 
 ### Comandos previos
-#### Kafaka
+#### Kafka
 Es necesario crear el topico por el cual pasaran los mensajes
 
 #### Cassandra

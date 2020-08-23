@@ -40,7 +40,7 @@ public class App{
         Config config = new Config();
         // config.put(Config.NIMBUS_THRIFT_PORT, 6627);
         // config.put(Config.STORM_ZOOKEEPER_PORT, 2181);
-        // config.setDebug(true);
+        config.setDebug(true);
         
         try {
             LocalCluster cluster = new LocalCluster();
