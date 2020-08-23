@@ -43,7 +43,7 @@ def actualiza2(newcount,oldcount):
 
 conf = SparkConf().setAppName("PySpark Cassandra Test").set("spark.cassandra.connection.host","localhost")
 sc = CassandraSparkContext(conf=conf)
-
+sc.setLogLevel("WARN")
 def cassandraSend(values):
     #print(values)
     rdd = sc.parallelize([{"subreddit": values[0],"word": values[1],
@@ -78,4 +78,5 @@ scores.pprint()
 
 
 ssc.start()             # Start the computation
-ssc.awaitTermination()  # Wait for the computation to terminate
+ssc.awaitTerminationOrTimeout(20)  # Wait for the computation to terminate
+ssc.stop()
