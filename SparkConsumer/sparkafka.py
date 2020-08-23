@@ -78,5 +78,5 @@ scores.pprint()
 
 
 ssc.start()             # Start the computation
-ssc.awaitTerminationOrTimeout(20)  # Wait for the computation to terminate
+ssc.awaitTermination()#OrTimeout(20)  # Wait for the computation to terminate
 ssc.stop()
