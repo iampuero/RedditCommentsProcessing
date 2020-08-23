@@ -25,7 +25,7 @@ public class App{
         // in this bolt we count the data
         builder.setBolt("counter_bolt", new CounterBolt()).shuffleGrouping("read_json_bolt");
         // this bolt save the data in cassandra
-        builder.setBolt("word_saver_bolt", new StringSaverBolt(), 1).shuffleGrouping("counter_bolt");
+        builder.setBolt("word_saver_bolt", new StringSaverBolt()).shuffleGrouping("counter_bolt");
 
         // second version: in this case the bolt that save the data make a query to get the previus value
         // comment the version above and discomment this part to use it
@@ -35,7 +35,7 @@ public class App{
         // // in this bolts we procese the data
         // builder.setBolt("read_json_bolt", new ReadJsonBolt()).shuffleGrouping("kafka_spout");
         // // this bolt save the data in cassandra
-        // builder.setBolt("word_saver_bolt", new StringUpdateBolt(), 1).shuffleGrouping("read_json_bolt");
+        // builder.setBolt("word_saver_bolt", new StringUpdateBolt()).shuffleGrouping("read_json_bolt");
 
         Config config = new Config();
         // config.put(Config.NIMBUS_THRIFT_PORT, 6627);
